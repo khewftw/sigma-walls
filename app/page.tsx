@@ -1,69 +1,39 @@
-import Image from "next/image";
+"use client";
 
+import Image from "next/image";
+import { useRef } from "react";
+import LandingSections from "./landing-sections";
+
+function Arrow({ diagonal = false }: { diagonal?: boolean }) {
+  return <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d={diagonal ? "M6 18 18 6M6 6h12v12" : "M4 12h15m-6-6 6 6-6 6"} stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+}
 export default function Home() {
+  const videoDialog = useRef<HTMLDialogElement>(null);
+  function openCalculator() { document.getElementById("contact")?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" }); }
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <>
+      <main>
+        <section className="hero" id="home" aria-labelledby="hero-title">
+          <div className="room"><Image src="/images/living-room-v2.webp" alt="Белая дизайнерская гостиная с натяжными текстильными стенами и подсветкой по периметру" fill sizes="100vw" preload /></div>
+          <div className="hero-content wrap">
+            <h1 id="hero-title"><span className="headline-line">Ровные стены</span><span className="headline-line">с <strong>текстильной фактурой</strong></span><span className="headline-line">— без долгого ремонта</span></h1>
+            <p className="intro"><strong>Натяжные стены Sigma</strong> — отделка на каркасе с декоративной тканью. Закрывают неровности основания и помогают создать новый интерьер <strong>без длительного выравнивания</strong> стен под покраску.</p>
+            <button className="primary hero-cta" onClick={openCalculator}>Рассчитать стоимость моих стен</button>
+          </div>
+          <button className="video-orbit" aria-label="Посмотреть, как это устроено — открыть видео" onClick={() => videoDialog.current?.showModal()}>
+            <svg className="orbit-text" viewBox="0 0 180 180" aria-hidden="true"><defs><path id="text-circle" d="M90,90 m-62,0 a62,62 0 1,1 124,0 a62,62 0 1,1 -124,0"/></defs><text><textPath href="#text-circle" textLength="382" lengthAdjust="spacing">ПОСМОТРЕТЬ, КАК ЭТО УСТРОЕНО · SIGMA · </textPath></text></svg>
+            <span className="orbit-play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 11 7-11 7Z" fill="currentColor"/></svg></span>
+          </button>
+        </section>
+        <LandingSections />
       </main>
-    </div>
+      <dialog className="video-dialog" ref={videoDialog} aria-labelledby="video-title" onClick={e => { if(e.target === e.currentTarget) videoDialog.current?.close(); }}>
+        <button className="close" aria-label="Закрыть видео" onClick={() => videoDialog.current?.close()}>×</button>
+        <h2 id="video-title">Как устроены стены Sigma</h2>
+        <div className="video-placeholder"><span>▷</span><p>Видео скоро появится</p></div>
+        <p>Каркас задаёт плоскость стены, а декоративная ткань создаёт ровную поверхность. При обновлении интерьера ткань можно заменить.</p>
+        <a className="header-cta" href="#technology" onClick={() => videoDialog.current?.close()}>Подробнее о технологии <Arrow /></a>
+      </dialog>
+    </>
   );
 }
